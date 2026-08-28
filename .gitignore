@@ -1,0 +1,62 @@
+# ===== Backend (Django REST Framework) =====
+backend/.venv/
+backend/venv/
+backend/env/
+backend/__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+backend/*.sqlite3
+backend/db.sqlite3
+backend/media/
+backend/staticfiles/
+backend/.env
+backend/*.log
+instance/
+.pytest_cache/
+*.egg-info/
+
+# ===== Web (React) =====
+web/node_modules/
+web/build/
+web/dist/
+web/.env
+web/.env.local
+web/.env.development.local
+web/.env.test.local
+web/.env.production.local
+web/npm-debug.log*
+web/yarn-debug.log*
+web/yarn-error.log*
+web/.eslintcache
+
+# ===== Mobile (Flutter) =====
+mobile/.dart_tool/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/.packages
+mobile/.pub-cache/
+mobile/.pub/
+mobile/build/
+mobile/ios/Pods/
+mobile/ios/.symlinks/
+mobile/ios/Flutter/Flutter.framework
+mobile/ios/Flutter/Flutter.podspec
+mobile/android/.gradle/
+mobile/android/local.properties
+mobile/android/key.properties
+mobile/**/*.iml
+mobile/.flutter-versions
+
+# ===== Éditeurs / IDE =====
+.idea/
+.vscode/
+*.iml
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== Divers =====
+*.log
+.env
