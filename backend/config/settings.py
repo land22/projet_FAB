@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_spectacular',
     'corsheaders',
     'accounts',
 ]
@@ -130,6 +131,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 # Email
@@ -139,4 +141,9 @@ MAILERS = {
     'default': {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
+}
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Projet FAB API',
+    'DESCRIPTION': 'API de gestion pour la ferme — employés, ventes, stock, approvisionnement',
+    'VERSION': '1.0.0',
 }
