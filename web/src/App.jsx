@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Employees from './pages/Employees';
 
 function App() {
   return (
@@ -22,6 +23,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+          path="/employees"
+          element={
+            <ProtectedRoute requireRole="chef_du_personnel">
+              <Employees />
+            </ProtectedRoute>
+          }
+        />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
