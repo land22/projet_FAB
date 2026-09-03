@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getEmployees, createEmployee, updateEmployee, deleteEmployee } from '../api/employees';
 import Layout from '../components/Layout';
+import { useNavigate } from 'react-router-dom';
 
 const EMPTY_FORM = {
   first_name: '', last_name: '', poste: '', telephone: '',
@@ -14,6 +15,7 @@ export default function Employees() {
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const loadEmployees = async () => {
     setLoading(true);
@@ -170,7 +172,11 @@ export default function Employees() {
             </thead>
             <tbody>
               {employees.map((emp) => (
-                <tr key={emp.id} style={{ borderTop: '1px solid #eee' }}>
+                <tr
+                  key={emp.id}
+                  style={{ borderTop: '1px solid #eee', cursor: 'pointer' }}
+                  onClick={() => navigate(`/employees/${emp.id}`)}
+                >
                   <td style={{ padding: 12, fontSize: 14 }}>{emp.first_name} {emp.last_name}</td>
                   <td style={{ padding: 12, fontSize: 14 }}>{emp.poste}</td>
                   <td style={{ padding: 12, fontSize: 14 }}>{emp.telephone || '—'}</td>
@@ -184,10 +190,10 @@ export default function Employees() {
                     </span>
                   </td>
                   <td style={{ padding: 12, fontSize: 13, textAlign: 'right' }}>
-                    <button onClick={() => openEditForm(emp)} style={{ marginRight: 8, border: 'none', background: 'none', color: 'var(--green-main)', cursor: 'pointer', fontWeight: 600 }}>
+                    <button onClick={(e) => { e.stopPropagation(); openEditForm(emp); }} style={{ marginRight: 8, border: 'none', background: 'none', color: 'var(--forest-light)', cursor: 'pointer', fontWeight: 600 }}>
                       Modifier
                     </button>
-                    <button onClick={() => handleDelete(emp.id)} style={{ border: 'none', background: 'none', color: '#c62828', cursor: 'pointer', fontWeight: 600 }}>
+                    <button onClick={(e) => { e.stopPropagation(); handleDelete(emp.id); }} style={{ border: 'none', background: 'none', color: '#c62828', cursor: 'pointer', fontWeight: 600 }}>
                       Supprimer
                     </button>
                   </td>

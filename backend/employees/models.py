@@ -23,3 +23,34 @@ class Employee(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} — {self.poste}"
+
+
+class Avance(models.Model):
+    """Avance sur salaire accordée à un employé en cours de mois."""
+
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='avances')
+    montant = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date']
+
+    def __str__(self):
+        return f"Avance {self.montant} — {self.employee} ({self.date})"
+
+
+class Maladie(models.Model):
+    """Épisode de maladie pris en charge par l'entreprise pour un employé."""
+
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='maladies')
+    date_debut = models.DateField()
+    nombre_jours = models.PositiveIntegerField()
+    montant_depense = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date_debut']
+
+    def __str__(self):
+        return f"Maladie {self.employee} — {self.nombre_jours} j ({self.date_debut})"
