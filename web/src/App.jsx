@@ -10,6 +10,8 @@ import EmployeeDetail from './pages/EmployeeDetail';
 import Clients from './pages/Clients';
 import ClientDetail from './pages/ClientDetail';
 import Rations from './pages/Rations';
+import Approvisionnement from './pages/Approvisionnement';
+import ApprovisionnementDetail from './pages/ApprovisionnementDetail';
 
 function App() {
   return (
@@ -64,6 +66,22 @@ function App() {
           element={
             <ProtectedRoute requireRole="chef_du_personnel">
               <Rations />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/approvisionnement"
+          element={
+            <ProtectedRoute requireRole="gerant">
+              <Approvisionnement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/approvisionnement/:id"
+          element={
+            <ProtectedRoute requireRole="gerant">
+              <ApprovisionnementDetail />
             </ProtectedRoute>
           }
         />
