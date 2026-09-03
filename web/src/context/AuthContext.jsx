@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import api from '../api/axios';
 import { setAccessToken } from '../api/tokenStore';
+import { API_URL } from '../api/config';
 
 const AuthContext = createContext(null);
 
@@ -24,7 +25,7 @@ export function AuthProvider({ children }) {
     (async () => {
       try {
         const res = await axios.post(
-          'http://localhost:8000/api/auth/login/refresh/',
+          `${API_URL}/auth/login/refresh/`,
           {},
           { withCredentials: true }
         );

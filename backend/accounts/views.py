@@ -25,7 +25,10 @@ def _set_refresh_cookie(response, refresh_token):
         max_age=max_age,
         httponly=True,
         secure=not settings.DEBUG,
-        samesite='Lax',
+        # En local (DEBUG=True), frontend et backend partagent le même hostname
+        # (localhost) : Lax suffit. En production, ce sont deux domaines distincts
+        # (ex: github.io / pythonanywhere.com) : il faut None (+ Secure, déjà HTTPS).
+        samesite='Lax' if settings.DEBUG else 'None',
         path=REFRESH_COOKIE_PATH,
     )
 

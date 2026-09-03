@@ -10,23 +10,33 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Charge backend/.env s'il existe (jamais commité — voir .env.example pour le modèle).
+# Absent en local, les valeurs par défaut ci-dessous s'appliquent sans rien configurer.
+load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^-aly(4lrmzi!@9#7&ggzo761zv+6^n!k(c3_nu$!$siqpr5^z'
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY', 'django-insecure-^-aly(4lrmzi!@9#7&ggzo761zv+6^n!k(c3_nu$!$siqpr5^z'
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    h.strip() for h in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()
+]
 
 
 # Application definition
@@ -130,7 +140,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 AUTH_USER_MODEL = 'accounts.User'
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Vite (React)
+    o.strip() for o in os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:5173').split(',') if o.strip()
 ]
 CORS_ALLOW_CREDENTIALS = True  # nécessaire pour que le cookie httpOnly (refresh token) voyage
 
