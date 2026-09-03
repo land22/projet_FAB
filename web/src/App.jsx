@@ -7,6 +7,8 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Employees from './pages/Employees';
 import EmployeeDetail from './pages/EmployeeDetail';
+import Clients from './pages/Clients';
+import ClientDetail from './pages/ClientDetail';
 
 function App() {
   return (
@@ -40,6 +42,22 @@ function App() {
           </ProtectedRoute>
         }
       />
+        <Route
+          path="/clients"
+          element={
+            <ProtectedRoute requireRole="gerant">
+              <Clients />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/clients/:id"
+          element={
+            <ProtectedRoute requireRole="gerant">
+              <ClientDetail />
+            </ProtectedRoute>
+          }
+        />
         </Routes>
 
       </AuthProvider>
