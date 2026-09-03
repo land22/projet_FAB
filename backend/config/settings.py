@@ -132,6 +132,7 @@ AUTH_USER_MODEL = 'accounts.User'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite (React)
 ]
+CORS_ALLOW_CREDENTIALS = True  # nécessaire pour que le cookie httpOnly (refresh token) voyage
 
 # Django REST Framework
 REST_FRAMEWORK = {

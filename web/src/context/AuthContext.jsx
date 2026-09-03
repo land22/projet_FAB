@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 import api from '../api/axios';
+import { setAccessToken } from '../api/tokenStore';
 
 const AuthContext = createContext(null);
 
@@ -13,38 +15,42 @@ export function AuthProvider({ children }) {
       setUser(res.data);
     } catch {
       setUser(null);
-    } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('access');
-    if (token) {
-      fetchMe();
-    } else {
-      setLoading(false);
-    }
+    // Au chargement de l'app, tente un rafraîchissement silencieux via le cookie
+    // httpOnly (seul indice de session persistant — rien n'est stocké côté JS).
+    (async () => {
+      try {
+        const res = await axios.post(
+          'http://localhost:8000/api/auth/login/refresh/',
+          {},
+          { withCredentials: true }
+        );
+        setAccessToken(res.data.access);
+        await fetchMe();
+      } catch {
+        setAccessToken(null);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   const login = async (username, password) => {
     const res = await api.post('/auth/login/', { username, password });
-    localStorage.setItem('access', res.data.access);
-    localStorage.setItem('refresh', res.data.refresh);
+    setAccessToken(res.data.access);
     await fetchMe();
   };
 
   const logout = async () => {
-    const refresh = localStorage.getItem('refresh');
     try {
-      if (refresh) {
-        await api.post('/auth/logout/', { refresh });
-      }
+      await api.post('/auth/logout/');
     } catch {
       // même si l'appel échoue, on nettoie côté client
     } finally {
-      localStorage.removeItem('access');
-      localStorage.removeItem('refresh');
+      setAccessToken(null);
       setUser(null);
     }
   };

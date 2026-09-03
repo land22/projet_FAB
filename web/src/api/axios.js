@@ -1,19 +1,21 @@
 import axios from 'axios';
+import { getAccessToken, setAccessToken } from './tokenStore';
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api',
+  baseURL: 'http://localhost:8000/api',
+  withCredentials: true, // envoie le cookie httpOnly (refresh token) au backend
 });
 
-// Ajoute automatiquement le token à chaque requête
+// Ajoute automatiquement l'access token (en mémoire) à chaque requête
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('access');
+  const token = getAccessToken();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-// Rafraîchit le token automatiquement si expiré (401)
+// Rafraîchit l'access token automatiquement si expiré (401), via le cookie httpOnly
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -21,21 +23,19 @@ api.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      const refresh = localStorage.getItem('refresh');
 
-      if (refresh) {
-        try {
-          const res = await axios.post('http://127.0.0.1:8000/api/auth/login/refresh/', {
-            refresh,
-          });
-          localStorage.setItem('access', res.data.access);
-          originalRequest.headers.Authorization = `Bearer ${res.data.access}`;
-          return api(originalRequest);
-        } catch {
-          localStorage.removeItem('access');
-          localStorage.removeItem('refresh');
-          window.location.href = '/login';
-        }
+      try {
+        const res = await axios.post(
+          'http://localhost:8000/api/auth/login/refresh/',
+          {},
+          { withCredentials: true }
+        );
+        setAccessToken(res.data.access);
+        originalRequest.headers.Authorization = `Bearer ${res.data.access}`;
+        return api(originalRequest);
+      } catch {
+        setAccessToken(null);
+        window.location.href = '/login';
       }
     }
 
