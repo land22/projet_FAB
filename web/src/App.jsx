@@ -9,6 +9,7 @@ import Employees from './pages/Employees';
 import EmployeeDetail from './pages/EmployeeDetail';
 import Clients from './pages/Clients';
 import ClientDetail from './pages/ClientDetail';
+import Rations from './pages/Rations';
 
 function App() {
   return (
@@ -55,6 +56,14 @@ function App() {
           element={
             <ProtectedRoute requireRole="gerant">
               <ClientDetail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/rations"
+          element={
+            <ProtectedRoute requireRole="chef_du_personnel">
+              <Rations />
             </ProtectedRoute>
           }
         />

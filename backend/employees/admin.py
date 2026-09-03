@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Employee, Avance, Maladie
+from .models import Employee, Avance, Maladie, Ration
 
 
 @admin.register(Employee)
@@ -21,3 +21,10 @@ class MaladieAdmin(admin.ModelAdmin):
     list_display = ('employee', 'date_debut', 'nombre_jours', 'montant_depense')
     list_filter = ('date_debut',)
     search_fields = ('employee__first_name', 'employee__last_name')
+
+
+@admin.register(Ration)
+class RationAdmin(admin.ModelAdmin):
+    list_display = ('date', 'montant', 'description')
+    list_filter = ('date',)
+    search_fields = ('description',)

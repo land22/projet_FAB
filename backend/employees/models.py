@@ -54,3 +54,21 @@ class Maladie(models.Model):
 
     def __str__(self):
         return f"Maladie {self.employee} — {self.nombre_jours} j ({self.date_debut})"
+
+
+class Ration(models.Model):
+    """
+    Dépense de ration alimentaire pour le personnel : journal global indépendant
+    du salaire et des avances, non rattaché à un employé en particulier.
+    """
+
+    date = models.DateField()
+    montant = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date']
+
+    def __str__(self):
+        return f"Ration {self.montant} — {self.date}"

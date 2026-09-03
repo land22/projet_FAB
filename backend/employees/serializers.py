@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Employee, Avance, Maladie
+from .models import Employee, Avance, Maladie, Ration
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
@@ -25,3 +25,9 @@ class MaladieSerializer(serializers.ModelSerializer):
             'id', 'employee', 'employee_name',
             'date_debut', 'nombre_jours', 'montant_depense', 'created_at',
         ]
+
+
+class RationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ration
+        fields = ['id', 'date', 'montant', 'description', 'created_at']

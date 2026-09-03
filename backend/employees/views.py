@@ -4,8 +4,8 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from accounts.permissions import IsResponsableOrChefDuPersonnel
-from .models import Employee, Avance, Maladie
-from .serializers import EmployeeSerializer, AvanceSerializer, MaladieSerializer
+from .models import Employee, Avance, Maladie, Ration
+from .serializers import EmployeeSerializer, AvanceSerializer, MaladieSerializer, RationSerializer
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):
@@ -69,3 +69,39 @@ class MaladieViewSet(viewsets.ModelViewSet):
         if employee_id:
             queryset = queryset.filter(employee_id=employee_id)
         return queryset
+
+
+class RationViewSet(viewsets.ModelViewSet):
+    """
+    CRUD sur le journal des dépenses de ration alimentaire du personnel.
+    Journal global, non rattaché à un employé — réservé au Responsable et au
+    Chef du personnel.
+    """
+    serializer_class = RationSerializer
+    permission_classes = [IsResponsableOrChefDuPersonnel]
+
+    def get_queryset(self):
+        queryset = Ration.objects.all()
+        month = self.request.query_params.get('month')
+        year = self.request.query_params.get('year')
+        if month:
+            queryset = queryset.filter(date__month=month)
+        if year:
+            queryset = queryset.filter(date__year=year)
+        return queryset
+
+    @action(detail=False, methods=['get'])
+    def total(self, request):
+        """Total dépensé en ration alimentaire sur un mois donné (mois en cours par défaut)."""
+        today = timezone.now().date()
+        try:
+            month = int(request.query_params.get('month', today.month))
+            year = int(request.query_params.get('year', today.year))
+        except ValueError:
+            return Response({'detail': "month et year doivent être des entiers."}, status=400)
+
+        total = Ration.objects.filter(
+            date__year=year, date__month=month
+        ).aggregate(total=Sum('montant'))['total'] or 0
+
+        return Response({'mois': month, 'annee': year, 'total': total})

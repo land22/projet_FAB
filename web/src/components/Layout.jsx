@@ -5,6 +5,7 @@ const NAV_ITEMS = [
   { path: '/dashboard', label: 'Tableau de bord', icon: '⌂', roleRequired: null },
   { path: '/employees', label: 'Personnel', icon: '🌿', roleRequired: 'chef_du_personnel' },
   { path: '/clients', label: 'Ventes', icon: '🍅', roleRequired: 'gerant' },
+  { path: '/rations', label: 'Ration alimentaire', icon: '🍚', roleRequired: 'chef_du_personnel' },
 ];
 
 export default function Layout({ children }) {
