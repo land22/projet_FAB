@@ -22,10 +22,11 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     roles = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
+    is_superuser = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_responsable', 'roles')
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_responsable', 'is_superuser', 'roles')
 
 
 class ChangeRoleSerializer(serializers.Serializer):

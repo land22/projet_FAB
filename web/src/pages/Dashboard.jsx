@@ -4,7 +4,7 @@ import Layout from '../components/Layout';
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const canManageEmployees = user.is_responsable || user.roles.includes('chef_du_personnel');
+  const canManageEmployees = user.is_superuser || user.is_responsable || user.roles.includes('chef_du_personnel');
 
   return (
     <Layout>
@@ -19,7 +19,7 @@ export default function Dashboard() {
         <div style={{ background: 'white', borderRadius: 12, padding: 20, boxShadow: '0 4px 14px rgba(27,67,50,0.07)' }}>
           <div style={{ fontSize: 12, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Statut</div>
           <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, marginTop: 6 }}>
-            {user.is_responsable ? 'Responsable' : 'Employé'}
+            {user.is_superuser ? 'Super admin' : user.is_responsable ? 'Responsable' : 'Employé'}
           </div>
         </div>
         <div style={{ background: 'white', borderRadius: 12, padding: 20, boxShadow: '0 4px 14px rgba(27,67,50,0.07)' }}>

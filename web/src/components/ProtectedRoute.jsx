@@ -1,7 +1,10 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-export default function ProtectedRoute({ children, requireResponsable = false, requireRole = null }) {
+export default function ProtectedRoute({
+  children, requireResponsable = false, requireRole = null,
+  requireSuperuser = false, requireSuperuserOrResponsable = false,
+}) {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -12,11 +15,19 @@ export default function ProtectedRoute({ children, requireResponsable = false, r
     return <Navigate to="/login" replace />;
   }
 
-  if (requireResponsable && !user.is_responsable) {
+  if (requireSuperuser && !user.is_superuser) {
     return <Navigate to="/" replace />;
   }
 
-  if (requireRole && !user.is_responsable && !user.roles.includes(requireRole)) {
+  if (requireSuperuserOrResponsable && !(user.is_superuser || user.is_responsable)) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (requireResponsable && !user.is_superuser && !user.is_responsable) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (requireRole && !user.is_superuser && !user.is_responsable && !user.roles.includes(requireRole)) {
     return <Navigate to="/" replace />;
   }
 

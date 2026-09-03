@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Users from './pages/Users';
 import Employees from './pages/Employees';
 import EmployeeDetail from './pages/EmployeeDetail';
 import Clients from './pages/Clients';
@@ -26,6 +27,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              <ProtectedRoute requireSuperuserOrResponsable>
+                <Users />
               </ProtectedRoute>
             }
           />

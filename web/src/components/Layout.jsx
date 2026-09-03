@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 
 const NAV_ITEMS = [
   { path: '/dashboard', label: 'Tableau de bord', icon: '⌂', roleRequired: null },
+  { path: '/users', label: 'Utilisateurs', icon: '🔑', superuserOrResponsableOnly: true },
   { path: '/employees', label: 'Personnel', icon: '🌿', roleRequired: 'chef_du_personnel' },
   { path: '/clients', label: 'Ventes', icon: '🍅', roleRequired: 'gerant' },
   { path: '/rations', label: 'Ration alimentaire', icon: '🍚', roleRequired: 'chef_du_personnel' },
@@ -13,9 +14,11 @@ export default function Layout({ children }) {
   const { user, logout } = useAuth();
   const location = useLocation();
 
-  const visibleItems = NAV_ITEMS.filter(
-    (item) => !item.roleRequired || user.is_responsable || user.roles.includes(item.roleRequired)
-  );
+  const visibleItems = NAV_ITEMS.filter((item) => {
+    if (user.is_superuser) return true;
+    if (item.superuserOrResponsableOnly) return user.is_responsable;
+    return !item.roleRequired || user.is_responsable || user.roles.includes(item.roleRequired);
+  });
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--cream)' }}>
@@ -62,7 +65,7 @@ export default function Layout({ children }) {
             fontSize: 12, opacity: 0.6, marginBottom: 10, paddingTop: 16,
             borderTop: '1px solid rgba(255,255,255,0.12)',
           }}>
-            {user.username} · {user.is_responsable ? 'Responsable' : (user.roles[0] || 'Employé')}
+            {user.username} · {user.is_superuser ? 'Super admin' : user.is_responsable ? 'Responsable' : (user.roles[0] || 'Employé')}
           </div>
           <button
             onClick={logout}
