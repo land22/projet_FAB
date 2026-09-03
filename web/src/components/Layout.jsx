@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import logo from '../assets/logo.jpg';
 
 const NAV_ITEMS = [
   { path: '/dashboard', label: 'Tableau de bord', icon: '⌂', roleRequired: null },
@@ -28,7 +29,7 @@ export default function Layout({ children }) {
         display: 'flex', flexDirection: 'column', padding: '28px 0', flexShrink: 0,
       }}>
         <div style={{ padding: '0 24px', marginBottom: 36, display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 22 }}>🌾</span>
+          <img src={logo} alt="Ferme FAB" style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover' }} />
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 16, lineHeight: 1.1 }}>
               Ferme FAB
